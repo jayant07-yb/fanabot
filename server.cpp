@@ -1,8 +1,13 @@
 #include "crow.h"
-#include "main.h"
 #include "navigation.h"
+#include "main.h"
 
 using namespace std;
+void *run_navigation(void *arg) {
+    global_navigation.runNavigation();
+    return NULL;
+}
+
 // Handler for /move endpoint
 crow::response handleMove(const crow::request& req) {
     auto body = crow::json::load(req.body);
@@ -15,7 +20,7 @@ crow::response handleMove(const crow::request& req) {
     int time = body["time"].i();
     pthread_t navigation;
     global_navigation.setTime(time);
-    if (pthread_create(&naviagtion, NULL, global_navigation.runNavigation, NULL) != 0) {
+    if (pthread_create(&naviagtion, NULL, run_navigation, NULL) != 0) {
         std::cerr << "Failed to create location thread" << std::endl;
         response["status"] = "failure";
         response["message"] = "Unable to move";

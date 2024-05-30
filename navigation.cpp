@@ -19,6 +19,7 @@
 #include <csignal>
 #include "VL53L0X.hpp"
 using namespace std;
+Navigate global_navigation;
 //TODO(janand): Implement this, to ensure that the threads are killed when the object is destroyed
 Navigate::~Navigate() {
     //This will kill the threads
@@ -70,13 +71,30 @@ void* Navigate::runNavigation()
     pthread_join(location_thread, NULL);
 }
 
-void Wheel::move_forward(){
+Navigate::Navigate(int leftPin, int rightPin)
+    : wheel(leftPin, rightPin) {
+}
+
+
+////////////////////////
+
+
+Wheel::Wheel(int leftPin, int rightPin)
+    : leftPin(leftPin), rightPin(rightPin) {
+    // Initialize the GPIO pins
+    wiringPiSetupGpio();  // Use GPIO numbering
+    pinMode(leftPin, OUTPUT);
+    pinMode(rightPin, OUTPUT);
+}
+
+void Wheel::move_forward() {
     std::cout << "Moving forward\n";
-    //TODO(janand): Implement this
+    digitalWrite(leftPin, HIGH);  // Set the forward pin high
+    digitalWrite(rightPin, HIGH);  // Set the backward pin low
 }
 
-void Wheel::stop(){
-    //TODO(janand): Implement this
+void Wheel::stop() {
     std::cout << "Stopping\n";
+    digitalWrite(leftPin, LOW);  // Set the forward pin low
+    digitalWrite(rightPin, LOW);  // Set the backward pin low
 }
-

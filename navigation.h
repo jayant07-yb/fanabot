@@ -4,10 +4,11 @@
 #pragma once
 
 class Wheel{
+    int rightPin, rightPin;
 public:
+    Wheel(int leftPin, int rightPin);
     void move_forward();
     void stop();
-    // void rotate(int angle);
 };
 
 class Navigate {
@@ -23,9 +24,10 @@ private:
 public:    
     void *read_location();
 
+    Navigate(int leftPin, int rightPin);
     ~Navigate();
     void setTime(int x) {distance  = x;}
     void* runNavigation();
 };
 
-Navigate global_navigation;
+extern Navigate global_navigation;
