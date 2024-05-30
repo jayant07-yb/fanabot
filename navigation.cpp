@@ -31,17 +31,17 @@ void* Navigate::runNavigation()
 {
     if (pthread_create(&servo_thread, NULL, rotate_servo, &exitFlag) != 0) {
         std::cerr << "Failed to create servo thread" << std::endl;
-        return;
+        return NULL;
     }
 
     if (pthread_create(&lidar_thread, NULL, read_lidar, &exitFlag) != 0) {
         std::cerr << "Failed to create lidar thread" << std::endl;
-        return;
+        return NULL;
     }
 
     if (pthread_create(&location_thread, NULL, read_location, NULL) != 0) {
         std::cerr << "Failed to create location thread" << std::endl;
-        return;
+        return NULL;
     }
 
     while(distance > 0)-{
