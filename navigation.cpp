@@ -45,14 +45,14 @@ void* Navigate::runNavigation()
         return NULL;
     }
 
-    if (pthread_create(&location_thread, NULL, read_location, NULL) != 0) {
+    if (pthread_create(&location_thread, NULL, global_navigation.read_location, NULL) != 0) {
         std::cerr << "Failed to create location thread" << std::endl;
         return NULL;
     }
 
     while(distance > 0){
         wheel.move_forward();
-        Thread.sleep(std::chrono::milliseconds(100));
+        usleep(100000);
     }
 
     wheel.stop();
