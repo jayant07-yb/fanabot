@@ -44,7 +44,7 @@ void* Navigate::runNavigation()
         return NULL;
     }
 
-    while(distance > 0)-{
+    while(distance > 0){
         wheel.move_forward();
         Thread.sleep(std::chrono::milliseconds(100));
     }

@@ -2,6 +2,7 @@
 #include "main.h"
 #include "navigation.h"
 
+using namespace std;
 // Handler for /move endpoint
 crow::response handleMove(const crow::request& req) {
     auto body = crow::json::load(req.body);
