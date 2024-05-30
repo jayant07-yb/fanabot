@@ -5,7 +5,7 @@
 #include <csignal>
 #include "VL53L0X.hpp"
 
-#include "lidar_Reading.h"
+#include "lidar_reading.h"
 
 // Calculate pulse width for the given angle
 static inline int calculate_pulse_width(int angle) {
@@ -23,6 +23,8 @@ static inline void set_servo_angle(int angle) {
 
 // Rotate the servo between LEFT_ANGLE and RIGHT_ANGLE
 void* rotate_servo(void* arg) {
+    bool *exitFlag;
+    exitFlag = arg;
     while (!exitFlag) {
         set_servo_angle(LEFT_ANGLE);
         usleep(39000);  // 81ms delay
@@ -34,6 +36,9 @@ void* rotate_servo(void* arg) {
 
 // Read distance from the VL53L0X sensor
 void* read_lidar(void* arg) {
+    bool *exitFlag;
+    exitFlag = arg;
+
     while (!exitFlag) {
         try {
             uint16_t distance = sensor.readRangeSingleMillimeters();

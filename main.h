@@ -1,3 +1,3 @@
 #pragma once
 
-int runApp();
+extern int runApp();
