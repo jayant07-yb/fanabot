@@ -4,9 +4,10 @@
 #include <unistd.h>
 #include <csignal>
 #include "VL53L0X.hpp"
+#include "main.h"
 
 #include "lidar_reading.h"
-#include "main.h"
+
 using namespace std;
 // SIGINT (CTRL-C) exit flag and signal handler
 volatile sig_atomic_t exitFlag = 0;

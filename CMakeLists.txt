@@ -12,6 +12,7 @@ set(SOURCES
     main.cpp
     lidar_reading.cpp
     navigation.cpp
+    server.cpp
     ${VL53L0X_DIR}/VL53L0X.cpp
     ${VL53L0X_DIR}/I2Cdev.cpp
 )
