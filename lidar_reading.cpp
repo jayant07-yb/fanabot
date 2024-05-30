@@ -24,7 +24,7 @@ static inline void set_servo_angle(int angle) {
 // Rotate the servo between LEFT_ANGLE and RIGHT_ANGLE
 void* rotate_servo(void* arg) {
     bool *exitFlag;
-    exitFlag = arg;
+    exitFlag = static_cast<bool*>(arg);
     while (!exitFlag) {
         set_servo_angle(LEFT_ANGLE);
         usleep(39000);  // 81ms delay
@@ -37,7 +37,7 @@ void* rotate_servo(void* arg) {
 // Read distance from the VL53L0X sensor
 void* read_lidar(void* arg) {
     bool *exitFlag;
-    exitFlag = arg;
+    exitFlag =  static_cast<bool*>(arg);
 
     while (!exitFlag) {
         try {
