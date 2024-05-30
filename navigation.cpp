@@ -29,7 +29,7 @@ void* Naviagte::read_location(){
     }
 }
 
-int Navigate::runNavigation()
+void* Navigate::runNavigation()
 {
     if (pthread_create(&servo_thread, NULL, rotate_servo, &exitFlag) != 0) {
         std::cerr << "Failed to create servo thread" << std::endl;
