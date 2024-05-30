@@ -8,6 +8,9 @@
 #include "lidar_reading.h"
 
 using namespace std;
+
+VL53L0X sensor;  // Device instance for the VL53L0X
+
 // Calculate pulse width for the given angle
 static inline int calculate_pulse_width(int angle) {
     return 1000 + (angle * 1000) / 180;
