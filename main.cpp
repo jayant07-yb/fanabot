@@ -6,7 +6,7 @@
 #include "VL53L0X.hpp"
 
 #include "lidar_reading.h"
-
+#include "navigation.h"
 using namespace std;
 // SIGINT (CTRL-C) exit flag and signal handler
 volatile sig_atomic_t exitFlag = 0;
