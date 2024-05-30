@@ -78,3 +78,5 @@ void Wheel::stop(){
     //TODO(janand): Implement this
     std::cout << "Stopping\n";
 }
+
+extern int runApp();

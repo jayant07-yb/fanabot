@@ -6,7 +6,6 @@
 #include "VL53L0X.hpp"
 
 #include "lidar_reading.h"
-#include "main.h"
 
 using namespace std;
 // SIGINT (CTRL-C) exit flag and signal handler

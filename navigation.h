@@ -2,6 +2,7 @@
 #include <iostream>
 
 #pragma once
+
 class Wheel{
 public:
     void move_forward();
