@@ -8,7 +8,7 @@ public:
     // void rotate(int angle);
 };
 
-class Naviagte{
+class Navigate {
 private:
     Wheel wheel;
     int distance;
@@ -21,4 +21,5 @@ public:
     ~Naviagte();
     void setTime(int x): distance(x) {}
     void* runNavigation();
-} bot_navigation;
+};
+Navigate global_navigation;
