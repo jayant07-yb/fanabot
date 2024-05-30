@@ -12,15 +12,13 @@
 #include "navigation.h"
 #include "lidar_reading.h"
 
-Navigate::Navigate(int x, int y) : x_dest(x), y_dest(y) {}
-
 //TODO(janand): Implement this, to ensure that the threads are killed when the object is destroyed
 Navigate::~Navigate() {
     //This will kill the threads
     exitFlag = true;
 }
 
-void* Naviagte::read_location(){
+void* Navigate::read_location(){
     while(!exitFlag){
         thread.sleep_for(std::chrono::milliseconds(100));
         if (isInMotion){

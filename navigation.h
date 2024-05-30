@@ -1,4 +1,5 @@
 #include <pthread.h>
+#include <iostream>
 
 #pragma once
 class Wheel{
@@ -17,8 +18,7 @@ private:
     bool exitFlag = false;
     bool isInMotion = false;
 public:
-    Naviagte();
-    ~Naviagte();
+    ~Navigate();
     void setTime(int x): distance(x) {}
     void* runNavigation();
 };
