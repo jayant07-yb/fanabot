@@ -8,6 +8,7 @@
 #include <atomic>
 #include <chrono>
 #include "VL53L0X.hpp"
+#include "main.h"
 
 #include "navigation.h"
 #include "lidar_reading.h"
@@ -79,4 +80,3 @@ void Wheel::stop(){
     std::cout << "Stopping\n";
 }
 
-extern int runApp();
