@@ -19,5 +19,6 @@ private:
 public:
     Naviagte();
     ~Naviagte();
-    void* runNavigation(int distance);
-};
+    void setTime(int x): distance(x) {}
+    void* runNavigation();
+} bot_navigation;

@@ -5,7 +5,7 @@ project(Fanna)
 # Set the path to the VL53L0X library
 set(VL53L0X_DIR "/home/jayan/code/dependencies/vl53l0x-linux")
 # Specify the path to the Crow library within the project
-set(CROW_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/Crow/include")
+set(CROW_INCLUDE_DIR "/home/jayan/code/dependencies/Crow/include")
 
 # Define the source files for the project
 set(SOURCES

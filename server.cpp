@@ -1,5 +1,6 @@
 #include "crow.h"
 #include "main.h"
+#include "navigation.h"
 
 // Handler for /move endpoint
 crow::response handleMove(const crow::request& req) {
@@ -7,18 +8,23 @@ crow::response handleMove(const crow::request& req) {
     if (!body) {
         return crow::response(400, "Invalid JSON");
     }
+    crow::json::wvalue response;
 
     std::string direction = body["DIRECTION"].s();
     int time = body["time"].i();
+    pthread_t navigation;
+    global_navigation.setTime(time);
+    if (pthread_create(&naviagtion, NULL, global_navigation.runNavigation, NULL) != 0) {
+        std::cerr << "Failed to create location thread" << std::endl;
+        response["status"] = "failure";
+        response["message"] = "Unable to move";
+    } else {
+        response["status"] = "success";
+        response["message"] = "Move command received";
+        response["direction"] = direction;
+        response["time"] = time;
+    }
 
-    // Perform action based on direction and time
-    // ...
-
-    crow::json::wvalue response;
-    response["status"] = "success";
-    response["message"] = "Move command received";
-    response["direction"] = direction;
-    response["time"] = time;
     return crow::response{response};
 }
 
