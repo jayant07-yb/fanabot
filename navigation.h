@@ -17,9 +17,13 @@ private:
 
     bool exitFlag = false;
     bool isInMotion = false;
+
+    void *read_location();
+
 public:
     ~Navigate();
-    void setTime(int x): distance(x) {}
+    void setTime(int x) {distance  = x;}
     void* runNavigation();
 };
+
 Navigate global_navigation;
