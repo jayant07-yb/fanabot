@@ -32,8 +32,7 @@ Navigate::~Navigate() {
 
 Navigate::Navigate(){
     distance = 0;   
-    leftPin = 5;
-    rightPin = 6;
+    wheel = Wheel(5, 6);
 }
 
 void* Navigate::read_location(){
