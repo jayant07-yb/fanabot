@@ -8,6 +8,7 @@
 #include "lidar_reading.h"
 #include "main.h"
 
+using namespace std;
 // SIGINT (CTRL-C) exit flag and signal handler
 volatile sig_atomic_t exitFlag = 0;
 void sigintHandler(int) {

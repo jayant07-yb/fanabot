@@ -11,7 +11,13 @@
 
 #include "navigation.h"
 #include "lidar_reading.h"
-
+#include <iostream>
+#include <bcm2835.h>
+#include <pthread.h>
+#include <unistd.h>
+#include <csignal>
+#include "VL53L0X.hpp"
+using namespace std;
 //TODO(janand): Implement this, to ensure that the threads are killed when the object is destroyed
 Navigate::~Navigate() {
     //This will kill the threads
@@ -20,7 +26,7 @@ Navigate::~Navigate() {
 
 void* Navigate::read_location(){
     while(!exitFlag){
-        thread.sleep_for(std::chrono::milliseconds(100));
+        usleep(100000); //100 ms
         if (isInMotion){
             distance -= 100; 
         }

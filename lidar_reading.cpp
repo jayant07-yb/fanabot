@@ -7,6 +7,7 @@
 
 #include "lidar_reading.h"
 
+using namespace std;
 // Calculate pulse width for the given angle
 static inline int calculate_pulse_width(int angle) {
     return 1000 + (angle * 1000) / 180;
