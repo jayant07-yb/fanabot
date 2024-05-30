@@ -33,6 +33,10 @@ void* Navigate::read_location(){
     }
 }
 
+void *read_location(void* arg){
+    global_navigation.read_location();
+}
+
 void* Navigate::runNavigation()
 {
     if (pthread_create(&servo_thread, NULL, rotate_servo, &exitFlag) != 0) {
@@ -45,7 +49,7 @@ void* Navigate::runNavigation()
         return NULL;
     }
 
-    if (pthread_create(&location_thread, NULL, global_navigation.read_location, NULL) != 0) {
+    if (pthread_create(&location_thread, NULL, read_location, NULL) != 0) {
         std::cerr << "Failed to create location thread" << std::endl;
         return NULL;
     }
