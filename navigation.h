@@ -18,9 +18,10 @@ private:
     bool exitFlag = false;
     bool isInMotion = false;
 
+
+public:    
     void *read_location();
 
-public:
     ~Navigate();
     void setTime(int x) {distance  = x;}
     void* runNavigation();
