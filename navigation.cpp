@@ -18,12 +18,22 @@
 #include <unistd.h>
 #include <csignal>
 #include "VL53L0X.hpp"
+#include <wiringPi.h>
+
+
 using namespace std;
+
 Navigate global_navigation;
 //TODO(janand): Implement this, to ensure that the threads are killed when the object is destroyed
 Navigate::~Navigate() {
     //This will kill the threads
     exitFlag = true;
+}
+
+Navigate::Navigate(){
+    distance = 0;   
+    leftPin = 5;
+    rightPin = 6;
 }
 
 void* Navigate::read_location(){

@@ -4,7 +4,7 @@
 #pragma once
 
 class Wheel{
-    int rightPin, rightPin;
+    int leftPin, rightPin;
 public:
     Wheel(int leftPin, int rightPin);
     void move_forward();
@@ -23,7 +23,7 @@ private:
 
 public:    
     void *read_location();
-
+    Navigate();
     Navigate(int leftPin, int rightPin);
     ~Navigate();
     void setTime(int x) {distance  = x;}
