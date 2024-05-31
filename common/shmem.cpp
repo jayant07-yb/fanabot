@@ -6,13 +6,13 @@
 #include "shmem.h"
 
 const int SHM_SIZE = sizeof(FanaBotInfo); // Size of the shared memory segment
-#define SHMEM_KEY = 1123;
+#define SHMEM_KEY 1123;
 
 FanaBotInfo* initialize_shared_memory() {
     key_t key = SHMEM_KEY;
 
     // Create a shared memory segment
-    int shmid = shmget(key, SHM_SIZE, IPC_CREAT | IPC_EXCL | 0666)
+    int shmid = shmget(key, SHM_SIZE, IPC_CREAT | IPC_EXCL | 0666);
     if (shmid < 0) {
         std::cerr << "shmget error" << std::endl;
         exit(1);
@@ -26,12 +26,9 @@ FanaBotInfo* initialize_shared_memory() {
     }
 
     // Check if the shared memory segment is initialized
-    if (std::strlen(shm) == 0) {
-        shm->isMoving = false;
-        shm->obstucleDetected = false;
-    } else {
-        std::cout << "Shared memory segment already initialized with message: " << shm << std::endl;
-    }
+    // TODO:: Need to add a check here
+    shm->isMoving = false;
+    shm->obstucleDetected = false;
     return shm;
 }
 
