@@ -28,7 +28,7 @@ FanaBotInfo* initialize_shared_memory() {
     // Check if the shared memory segment is initialized
     // TODO:: Need to add a check here
     shm->isMoving = false;
-    shm->obstucleDetected = false;
+    shm->obstacleDetected = false;
     return shm;
 }
 
