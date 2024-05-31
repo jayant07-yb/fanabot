@@ -8,17 +8,17 @@ set(VL53L0X_DIR "/home/jayan/code/dependencies/vl53l0x-linux")
 set(CROW_INCLUDE_DIR "/home/jayan/code/dependencies/Crow/include")
 
 # Define the source files for the project
-set(SOURCES
-    main.cpp
-    lidar_reading.cpp
-    navigation.cpp
-    server.cpp
-    ${VL53L0X_DIR}/VL53L0X.cpp
-    ${VL53L0X_DIR}/I2Cdev.cpp
-)
+# set(SOURCES
+#     main.cpp
+#     lidar_reading.cpp
+#     navigation.cpp
+#     server.cpp
+#     ${VL53L0X_DIR}/VL53L0X.cpp
+#     ${VL53L0X_DIR}/I2Cdev.cpp
+# )
 
-# Add the executable
-add_executable(fanna ${SOURCES})
+# # Add the executable
+# add_executable(fanna ${SOURCES})
 
 # Include directories
 target_include_directories(fanna PUBLIC
@@ -30,10 +30,10 @@ target_include_directories(fanna PUBLIC
 )
 
 # Link libraries
-target_link_libraries(fanna
-    pthread
-    bcm2835
-)
+# target_link_libraries(fanna
+#     pthread
+#     bcm2835
+# )
 
 # Add subdirectories
 add_subdirectory(common)
