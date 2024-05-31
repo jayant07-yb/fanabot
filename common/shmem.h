@@ -6,13 +6,13 @@ enum TaskType {
     STOP
 };
 
-#typedef struct FanaBotTask FanaBotTask;
+typedef struct FanaBotTask FanaBotTask;
 struct FanaBotTask {
     TaskType task;
     int magnitude;
 };
 
-#typedef  struct FanaBotInfo FanaBotInfo;
+typedef  struct FanaBotInfo FanaBotInfo;
 struct FanaBotInfo {
     bool isMoving;
     bool obstucleDetected;
