@@ -4,7 +4,7 @@
 #include <unistd.h>
 #include <csignal>
 #include "VL53L0X.hpp"
-#include "common/shmem.h"
+#include "shmem.h"
 
 using namespace std;
 
@@ -62,9 +62,9 @@ void* read_lidar(void* arg) {
                 std::cerr << "Timeout occurred!" << std::endl;
             } else {
                 if (distance < 500) {
-                    botStatus->obstacleDetected = true;
+                    botStatus->obstucleDetected = true;
                 } else {
-                    botStatus->obstacleDetected = false;
+                    botStatus->obstucleDetected = false;
                 }
             }
         } catch (const std::exception& error) {
