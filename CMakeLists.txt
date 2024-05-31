@@ -21,13 +21,13 @@ set(CROW_INCLUDE_DIR "/home/jayan/code/dependencies/Crow/include")
 # add_executable(fanna ${SOURCES})
 
 # Include directories
-target_include_directories(fanna PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}
-    ${VL53L0X_DIR}
-    ${CROW_INCLUDE_DIR}
-    pthread
-    /usr/local/include
-)
+# target_include_directories(fanna PUBLIC
+#     ${CMAKE_CURRENT_SOURCE_DIR}
+#     ${VL53L0X_DIR}
+#     ${CROW_INCLUDE_DIR}
+#     pthread
+#     /usr/local/include
+# )
 
 # Link libraries
 # target_link_libraries(fanna
