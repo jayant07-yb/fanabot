@@ -4,10 +4,13 @@
 #include <unistd.h>
 #include <csignal>
 #include "VL53L0X.hpp"
-
-#include "lidar_reading.h"
+#include "common/shmem.h"
 
 using namespace std;
+
+#define LEFT_ANGLE 60
+#define RIGHT_ANGLE 130
+#define SERVO_PIN RPI_GPIO_P1_12  // GPIO 18
 
 VL53L0X sensor;  // Device instance for the VL53L0X
 
@@ -27,37 +30,67 @@ static inline void set_servo_angle(int angle) {
 
 // Rotate the servo between LEFT_ANGLE and RIGHT_ANGLE
 void* rotate_servo(void* arg) {
-    bool *exitFlag;
-    exitFlag = static_cast<bool*>(arg);
-    while (!exitFlag) {
+    FanaBotInfo* botStatus = static_cast<FanaBotInfo*>(arg);
+    while (true) {
+        if (!(botStatus->isMoving)) {
+            usleep(100000);
+            continue;
+        }
+
+        botStatus->lidarFunctional = true;
         set_servo_angle(LEFT_ANGLE);
         usleep(39000);  // 81ms delay
         set_servo_angle(RIGHT_ANGLE);
         usleep(39000);  // 50ms delay
     }
-    return NULL;
+    return nullptr;
 }
 
 // Read distance from the VL53L0X sensor
 void* read_lidar(void* arg) {
-    bool *exitFlag;
-    exitFlag =  static_cast<bool*>(arg);
+    FanaBotInfo* botStatus = static_cast<FanaBotInfo*>(arg);
+    while (true) {
+        if (!(botStatus->isMoving)) {
+            usleep(100000);
+            continue;
+        }
 
-    while (!exitFlag) {
+        usleep(50000);  // 50ms delay
         try {
             uint16_t distance = sensor.readRangeSingleMillimeters();
             if (sensor.timeoutOccurred()) {
                 std::cerr << "Timeout occurred!" << std::endl;
             } else {
                 if (distance < 500) {
-                    std::cout << "Distance too close: " << distance << " mm" << std::endl;
+                    botStatus->obstacleDetected = true;
+                } else {
+                    botStatus->obstacleDetected = false;
                 }
             }
         } catch (const std::exception& error) {
             std::cerr << "Error getting measurement: " << error.what() << std::endl;
         }
     }
-    return NULL;
+    return nullptr;
 }
 
+int main() {
+    FanaBotInfo* fanaBotInfo = initialize_shared_memory();
+    pthread_t servo_thread, lidar_thread;
 
+    if (pthread_create(&servo_thread, nullptr, rotate_servo, fanaBotInfo) != 0) {
+        std::cerr << "Failed to create servo thread" << std::endl;
+        return 1;
+    }
+
+    if (pthread_create(&lidar_thread, nullptr, read_lidar, fanaBotInfo) != 0) {
+        std::cerr << "Failed to create lidar thread" << std::endl;
+        return 1;
+    }
+
+    pthread_join(servo_thread, nullptr);
+    pthread_join(lidar_thread, nullptr);
+    std::cout << "Exiting..." << std::endl;
+
+    return 0;
+}

@@ -35,24 +35,8 @@ target_link_libraries(fanna
     bcm2835
 )
 
-# Examples from the library
-set(VL53L0X_EXAMPLES
-    single
-    singleMinimal
-    continuousMultipleSensors
-)
-
-foreach (example ${VL53L0X_EXAMPLES})
-    add_executable(${example}
-        ${VL53L0X_DIR}/VL53L0X.cpp
-        ${VL53L0X_DIR}/I2Cdev.cpp
-    )
-    target_include_directories(${example} PUBLIC
-        ${VL53L0X_DIR}
-        ${CMAKE_CURRENT_SOURCE_DIR}
-    )
-    target_link_libraries(${example}
-        pthread
-        bcm2835
-    )
-endforeach (example)
+# Add subdirectories
+add_subdirectory(common)
+add_subdirectory(lidar)
+# add_subdirectory(navigation)
+# add_subdirectory(server)
