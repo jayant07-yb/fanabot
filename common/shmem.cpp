@@ -12,7 +12,7 @@ FanaBotInfo* initialize_shared_memory() {
     key_t key = SHMEM_KEY;
 
     // Create a shared memory segment
-    int shmid = shmget(key, SHM_SIZE, IPC_CREAT | IPC_EXCL | 0666);
+    int shmid = shmget(key, SHM_SIZE, IPC_CREAT | 0666);
     if (shmid < 0) {
         std::cerr << "shmget error" << std::endl;
         exit(1);

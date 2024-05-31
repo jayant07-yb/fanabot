@@ -1,6 +1,4 @@
 #include "crow.h"
-#include "navigation.h"
-#include "main.h"
 #include "shmem.h"
 #include <iostream>
 
@@ -11,6 +9,12 @@ FanaBotInfo *botInfo;
 void set_navigation(FanaBotTask task)
 {
     botInfo->task = task;
+
+    // To be set/unset by other threads
+    if (task.task == TaskType::MOVE)
+        botInfo->isMoving = true;
+    else
+        botInfo->isMoving = false;
 }
 
 // Handler for /move endpoint
@@ -40,14 +44,16 @@ crow::response handleMove(const crow::request& req) {
 crow::response handleBreak(const crow::request& req) {
     // Perform break action
     // ...
-
+    FanaBotTask task;
+    task.task = TaskType::STOP;
+    set_navigation(task);
     crow::json::wvalue response;
     response["status"] = "success";
     response["message"] = "Break command received";
     return crow::response{response};
 }
 
-int runApp() {
+int main() {
     botInfo = initialize_shared_memory();
     crow::SimpleApp app;
 

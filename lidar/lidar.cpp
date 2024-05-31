@@ -85,10 +85,7 @@ int main() {
     bcm2835_gpio_fsel(SERVO_PIN, BCM2835_GPIO_FSEL_OUTP);
 
     // Initialize the VL53L0X sensor
-    if (!sensor.init()) {
-        std::cerr << "Failed to initialize VL53L0X sensor" << std::endl;
-        return 1;
-    }
+    sensor.initialize();
     sensor.setTimeout(500);
     sensor.startContinuous();
 
