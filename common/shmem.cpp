@@ -3,7 +3,7 @@
 #include <sys/shm.h>
 #include <cstring>
 
-#include "shared.h"
+#include "shmem.h"
 
 const int SHM_SIZE = sizeof(FanaBotInfo); // Size of the shared memory segment
 #define SHMEM_KEY = 1123
