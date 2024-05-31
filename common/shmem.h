@@ -15,7 +15,7 @@ struct FanaBotTask {
 typedef  struct FanaBotInfo FanaBotInfo;
 struct FanaBotInfo {
     bool isMoving;
-    bool obstucleDetected;
+    bool obstacleDetected;
     bool lidarFunctional;
     FanaBotTask task;
 };

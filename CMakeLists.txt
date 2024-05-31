@@ -37,6 +37,6 @@ set(CROW_INCLUDE_DIR "/home/jayan/code/dependencies/Crow/include")
 
 # Add subdirectories
 add_subdirectory(common)
+add_subdirectory(server)
 add_subdirectory(lidar)
 # add_subdirectory(navigation)
-# add_subdirectory(server)

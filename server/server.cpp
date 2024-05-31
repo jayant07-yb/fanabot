@@ -1,11 +1,16 @@
 #include "crow.h"
 #include "navigation.h"
 #include "main.h"
+#include "shmem.h"
+#include <iostream>
 
 using namespace std;
-void *run_navigation(void *arg) {
-    global_navigation.runNavigation();
-    return NULL;
+
+FanaBotInfo *botInfo;
+
+void set_navigation(FanaBotTask task)
+{
+    botInfo->task = task;
 }
 
 // Handler for /move endpoint
@@ -18,18 +23,15 @@ crow::response handleMove(const crow::request& req) {
 
     std::string direction = body["DIRECTION"].s();
     int time = body["time"].i();
-    pthread_t navigation;
-    global_navigation.setTime(time);
-    if (pthread_create(&naviagtion, NULL, run_navigation, NULL) != 0) {
-        std::cerr << "Failed to create location thread" << std::endl;
-        response["status"] = "failure";
-        response["message"] = "Unable to move";
-    } else {
-        response["status"] = "success";
-        response["message"] = "Move command received";
-        response["direction"] = direction;
-        response["time"] = time;
-    }
+    FanaBotTask task;
+    task.task = TaskType::MOVE;
+    task.magnitude = time;
+    set_navigation(task);
+
+    response["status"] = "success";
+    response["message"] = "Move command received";
+    response["direction"] = direction;
+    response["time"] = time;
 
     return crow::response{response};
 }
@@ -46,13 +48,14 @@ crow::response handleBreak(const crow::request& req) {
 }
 
 int runApp() {
+    botInfo = initialize_shared_memory();
     crow::SimpleApp app;
 
     // Route for /move
     CROW_ROUTE(app, "/move").methods(crow::HTTPMethod::POST)(handleMove);
 
     // Route for /break
-    CROW_ROUTE(app, "/break").methods(crow::HTTPMethod::POST)(handleBreak);
+    CROW_ROUTE(app, "/stop").methods(crow::HTTPMethod::POST)(handleBreak);
 
     app.port(8080).multithreaded().run();
 }

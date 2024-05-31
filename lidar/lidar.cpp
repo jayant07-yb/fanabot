@@ -33,7 +33,7 @@ void* rotate_servo(void* arg) {
     FanaBotInfo* botStatus = static_cast<FanaBotInfo*>(arg);
     while (true) {
         if (!(botStatus->isMoving)) {
-            usleep(100000);
+            usleep(100000); // 100 ms delay
             continue;
         }
 
@@ -62,9 +62,9 @@ void* read_lidar(void* arg) {
                 std::cerr << "Timeout occurred!" << std::endl;
             } else {
                 if (distance < 500) {
-                    botStatus->obstucleDetected = true;
+                    botStatus->obstacleDetected = true;
                 } else {
-                    botStatus->obstucleDetected = false;
+                    botStatus->obstacleDetected = false;
                 }
             }
         } catch (const std::exception& error) {
@@ -75,22 +75,47 @@ void* read_lidar(void* arg) {
 }
 
 int main() {
-    FanaBotInfo* fanaBotInfo = initialize_shared_memory();
-    pthread_t servo_thread, lidar_thread;
+    // Initialize the bcm2835 library
+    if (!bcm2835_init()) {
+        std::cerr << "Failed to initialize bcm2835 library" << std::endl;
+        return 1;
+    }
 
+    // Set the servo pin as an output
+    bcm2835_gpio_fsel(SERVO_PIN, BCM2835_GPIO_FSEL_OUTP);
+
+    // Initialize the VL53L0X sensor
+    if (!sensor.init()) {
+        std::cerr << "Failed to initialize VL53L0X sensor" << std::endl;
+        return 1;
+    }
+    sensor.setTimeout(500);
+    sensor.startContinuous();
+
+    // Initialize the shared memory
+    FanaBotInfo* fanaBotInfo = initialize_shared_memory();
+    if (fanaBotInfo == nullptr) {
+        std::cerr << "Failed to initialize shared memory" << std::endl;
+        return 1;
+    }
+
+    // Create threads
+    pthread_t servo_thread, lidar_thread;
     if (pthread_create(&servo_thread, nullptr, rotate_servo, fanaBotInfo) != 0) {
         std::cerr << "Failed to create servo thread" << std::endl;
         return 1;
     }
-
     if (pthread_create(&lidar_thread, nullptr, read_lidar, fanaBotInfo) != 0) {
         std::cerr << "Failed to create lidar thread" << std::endl;
         return 1;
     }
 
+    // Wait for threads to finish
     pthread_join(servo_thread, nullptr);
     pthread_join(lidar_thread, nullptr);
-    std::cout << "Exiting..." << std::endl;
 
+    // Clean up
+    bcm2835_close();
+    std::cout << "Exiting..." << std::endl;
     return 0;
 }
