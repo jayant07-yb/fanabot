@@ -6,10 +6,10 @@
 #include "shmem.h"
 
 const int SHM_SIZE = sizeof(FanaBotInfo); // Size of the shared memory segment
-#define SHMEM_KEY = 1123
+#define SHMEM_KEY = 1123;
 
 FanaBotInfo* initialize_shared_memory() {
-    key_T key = SHMEM_KEY;
+    key_t key = SHMEM_KEY;
 
     // Create a shared memory segment
     int shmid = shmget(key, SHM_SIZE, IPC_CREAT | IPC_EXCL | 0666)
