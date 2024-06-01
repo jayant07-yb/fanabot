@@ -11,6 +11,7 @@ using namespace std;
 #define LEFT_ANGLE 60
 #define RIGHT_ANGLE 130
 #define SERVO_PIN RPI_GPIO_P1_12  // GPIO 18
+#define LIDAR_PERMITABLE_DISTANCE 800
 
 VL53L0X sensor;  // Device instance for the VL53L0X
 
@@ -62,7 +63,7 @@ void* read_lidar(void* arg) {
                 std::cerr << "Timeout occurred!" << std::endl;
             } else {
                 std::cout<< "Distance: " << distance << " mm" << std::endl;
-                if (distance < 500) {
+                if (distance < LIDAR_PERMITABLE_DISTANCE) {
                     botStatus->obstacleDetected = true;
                 } else {
                     botStatus->obstacleDetected = false;
