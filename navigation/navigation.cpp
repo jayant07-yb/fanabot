@@ -42,6 +42,14 @@ void runNavigation(Wheel& wheel)
     pthread_join(location_thread, NULL);
 }
 
+void stopNavigation(Wheel& wheel)
+{
+    wheel.stop();
+    botInfo->isMoving = false;
+    botInfo->task.magnitude = 0;
+    botInfo->task.task = TaskType::STOP;
+}
+
 int main() {
     botInfo = initialize_shared_memory();
     Wheel wheel(5, 6);
@@ -58,9 +66,7 @@ int main() {
         }
         else if (botInfo->task.task == TaskType::STOP)
         {
-            
-            botInfo->isMoving = true;
-            wheel.stop();
+            stopNavigation(wheel);
         }
         else
         {
