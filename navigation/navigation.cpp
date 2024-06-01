@@ -33,7 +33,7 @@ void runNavigation(Wheel& wheel)
         return;
     }
 
-    while(*remaining_distance > 0){
+    while(remaining_distance > 0){
         usleep(100000);  // 100 ms
         if (botInfo->obstacleDetected)
         {
@@ -41,7 +41,6 @@ void runNavigation(Wheel& wheel)
             wheel.stop();
             continue;
         }
-
         wheel.move_forward();
     }
 
