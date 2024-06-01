@@ -11,9 +11,13 @@ void* read_location(void* remaining_distance_void) {
     int* remaining_distance = static_cast<int*>(remaining_distance_void);
     while(!botInfo->isMoving || *remaining_distance > 0){
         usleep(100000); //100 ms
-        if (botInfo->isMoving && *remaining_distance > 0){
-            *remaining_distance -= 100;
+        if (botInfo->obstacleDetected)
+        {
+            std::cout << "Obstacle detected\n";
+            continue;
         }
+
+        *remaining_distance -= 100;
     }
     return NULL;
 }
