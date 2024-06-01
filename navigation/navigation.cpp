@@ -9,7 +9,7 @@ using namespace std;
 FanaBotInfo* botInfo;
 void* read_location(void* remaining_distance_void) {
     int* remaining_distance = static_cast<int*>(remaining_distance_void);
-    while(!botInfo->isMoving || *remaining_distance > 0){
+    while(!botInfo->isMoving && *remaining_distance > 0){
         usleep(100000); //100 ms
         if (botInfo->obstacleDetected)
         {
@@ -27,13 +27,13 @@ void runNavigation(Wheel& wheel)
     pthread_t location_thread;
     botInfo->isMoving = true;
 
-    int remaining_distance = 0;
+    int remaining_distance = botInfo->task.magnitude;
     if (pthread_create(&location_thread, NULL, read_location, &remaining_distance) != 0) {
         std::cerr << "Failed to create location thread" << std::endl;
         return;
     }
 
-    while(botInfo->task.magnitude > 0){
+    while(*remaining_distance > 0){
         usleep(100000);  // 100 ms
         if (botInfo->obstacleDetected)
         {
@@ -41,6 +41,7 @@ void runNavigation(Wheel& wheel)
             wheel.stop();
             continue;
         }
+
         wheel.move_forward();
     }
 
