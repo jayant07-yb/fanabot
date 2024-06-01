@@ -1,4 +1,3 @@
-#include "navigation.h"
 #include "wheel.h"
 #include "shmem.h"
 #include <pthread.h>
@@ -8,16 +7,18 @@
 using namespace std;
 
 FanaBotInfo* botInfo;
-void* read_location(int* remaining_distance) {
-    while(!exitFlag){
+void* read_location(void* remaining_distance_void) {
+    int* remaining_distance = static_cast<int*>(remaining_distance_void);
+    while(!botInfo->isMoving || *remaining_distance > 0){
         usleep(100000); //100 ms
         if (botInfo->isMoving && *remaining_distance > 0){
             *remaining_distance -= 100;
         }
     }
+    return NULL;
 }
 
-void runNavigation()
+void runNavigation(Wheel& wheel)
 {
     pthread_t location_thread;
     botInfo->isMoving = true;
@@ -25,7 +26,7 @@ void runNavigation()
     int remaining_distance = 0;
     if (pthread_create(&location_thread, NULL, read_location, &remaining_distance) != 0) {
         std::cerr << "Failed to create location thread" << std::endl;
-        return NULL;
+        return;
     }
 
     while(botInfo->task.magnitude > 0){
@@ -53,7 +54,7 @@ int main() {
         
         if (botInfo->task.task == TaskType::MOVE)
         {
-            runNavigation();
+            runNavigation(wheel);
         }
         else if (botInfo->task.task == TaskType::STOP)
         {
