@@ -61,12 +61,14 @@ void* read_lidar(void* arg) {
             if (sensor.timeoutOccurred()) {
                 std::cerr << "Timeout occurred!" << std::endl;
             } else {
+                std::cout<< "Distance: " << distance << " mm" << std::endl;
                 if (distance < 500) {
                     botStatus->obstacleDetected = true;
                 } else {
                     botStatus->obstacleDetected = false;
                 }
             }
+            std::cout << "Obstacle detected: " << botStatus->obstacleDetected << std::endl;
         } catch (const std::exception& error) {
             std::cerr << "Error getting measurement: " << error.what() << std::endl;
         }

@@ -34,8 +34,14 @@ void runNavigation(Wheel& wheel)
     }
 
     while(botInfo->task.magnitude > 0){
+        usleep(100000);  // 100 ms
+        if (botInfo->obstacleDetected)
+        {
+            std::cout << "Obstacle detected\n";
+            wheel.stop();
+            continue;
+        }
         wheel.move_forward();
-        usleep(100000);
     }
 
     wheel.stop();
