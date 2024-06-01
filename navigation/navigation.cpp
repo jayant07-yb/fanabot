@@ -10,7 +10,7 @@ int remaining_distance = 0;
 
 FanaBotInfo* botInfo;
 void* read_location(void* remaining_distance_void) {
-    while(!botInfo->isMoving && remaining_distance > 0){
+    while(botInfo->isMoving && remaining_distance > 0){
         usleep(100000); //100 ms
         if (botInfo->obstacleDetected)
         {
