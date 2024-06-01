@@ -31,7 +31,7 @@ FanaBotInfo* initialize_shared_memory() {
     shm->obstacleDetected = false;
     
     // Status as stop
-    FanabotTask task;
+    FanaBotTask task;
     task.task = TaskType::STOP;
     shm->task = task;
 
