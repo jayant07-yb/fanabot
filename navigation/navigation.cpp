@@ -2,7 +2,7 @@
 #include "shmem.h"
 #include <pthread.h>
 #include <unistd.h>
-#include <iostream
+#include <iostream>
 
 using namespace std;
 

@@ -1,7 +1,5 @@
 #include "wheel.h"
-#include "lidar_reading.h"
 #include <iostream>
-#include <bcm2835.h>
 #include <pthread.h>
 #include <unistd.h>
 #include <csignal>
@@ -17,12 +15,12 @@ Wheel::Wheel(int leftPin, int rightPin)
 
 void Wheel::move_forward() {
     std::cout << "Moving forward\n";
-    digitalWrite(leftPin, HIGH);  // Set the forward pin high
-    digitalWrite(rightPin, HIGH);  // Set the backward pin low
+    digitalWrite(leftPin, HIGH);  // Set the left pin high
+    digitalWrite(rightPin, HIGH);  // Set the right pin high
 }
 
 void Wheel::stop() {
     std::cout << "Stopping\n";
-    digitalWrite(leftPin, LOW);  // Set the forward pin low
-    digitalWrite(rightPin, LOW);  // Set the backward pin low
+    digitalWrite(leftPin, LOW);  // Set the left pin low
+    digitalWrite(rightPin, LOW);  // Set the right pin low
 }
