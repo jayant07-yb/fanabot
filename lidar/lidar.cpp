@@ -39,9 +39,9 @@ void* rotate_servo(void* arg) {
 
         botStatus->lidarFunctional = true;
         set_servo_angle(LEFT_ANGLE);
-        usleep(39000);  // 81ms delay
+        usleep(81000);  // 81ms delay
         set_servo_angle(RIGHT_ANGLE);
-        usleep(39000);  // 50ms delay
+        usleep(81000);  // 50ms delay
     }
     return nullptr;
 }

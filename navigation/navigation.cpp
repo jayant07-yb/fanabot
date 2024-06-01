@@ -33,6 +33,7 @@ void runNavigation(Wheel& wheel)
         return;
     }
 
+
     while(remaining_distance > 0){
         usleep(100000);  // 100 ms
         if (botInfo->obstacleDetected)
@@ -42,6 +43,8 @@ void runNavigation(Wheel& wheel)
             continue;
         }
         wheel.move_forward();
+
+        std::cout << "Remaining distance: " << remaining_distance << std::endl;
     }
 
     wheel.stop();
