@@ -10,5 +10,5 @@ add_executable(lidar_executable lidar.cpp ${VL53L0X_DIR}/VL53L0X.cpp ${VL53L0X_D
 target_link_libraries(lidar_executable common bcm2835 pthread)
 
 # Ensure that the common and VL53L0X include directories are available
-target_include_directories(lidar_executable PRIVATE ${CMAKE_SOURCE_DIR}/common 
+target_include_directories(lidar_executable PRIVATE ${CMAKE_SOURCE_DIR}common/ 
                                         ${VL53L0X_DIR})

@@ -29,6 +29,12 @@ FanaBotInfo* initialize_shared_memory() {
     // TODO:: Need to add a check here
     shm->isMoving = false;
     shm->obstacleDetected = false;
+    
+    // Status as stop
+    FanabotTask task;
+    task.task = TaskType::STOP;
+    shm->task = task;
+
     return shm;
 }
 
