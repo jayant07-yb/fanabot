@@ -1,7 +1,10 @@
 #pragma once
 
 class Wheel{
-    int leftPin, rightPin;
+    int leftFrontPin;
+    int leftBackPin;
+    int rightFrontPin;
+    int rightBackPin;
 public:
     Wheel(int leftPin, int rightPin);
     Wheel() {}

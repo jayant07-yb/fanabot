@@ -66,7 +66,7 @@ void stopNavigation(Wheel& wheel)
 
 int main() {
     botInfo = initialize_shared_memory();
-    Wheel wheel(5, 6);
+    Wheel wheel(27, 22, 5, 6);
     wheel.stop();
 
     while (true)
