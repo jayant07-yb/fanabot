@@ -116,6 +116,7 @@ int main() {
         else if (botInfo->task.task == TaskType::ROTATE)
         {
             wheel.turn_right();
+            botInfo->task.task = TaskType::STOP;
         }
         else
         {

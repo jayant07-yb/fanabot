@@ -72,24 +72,12 @@ void Wheel::turn_left() {
 
 void Wheel::turn_right() {
     std::cout << "Turning right\n";
-    AngleTracker angleTracker;
-    float initial_angle = angleTracker.getCurrentAngle();
 
     digitalWrite(leftFrontPin, HIGH);
     digitalWrite(leftBackPin, LOW);
     digitalWrite(rightFrontPin, LOW);
     digitalWrite(rightBackPin, HIGH);
 
-    while (true) {
-        angleTracker.updateAngle();
-        float currentAngle = angleTracker.getCurrentAngle();
-        std::cout << "Current Angle: " << currentAngle << " degrees" << std::endl;
-        delay(100);  // Update every 100 ms
-
-        if (currentAngle - initial_angle >= 90.0) {
-            break;
-        }    
-    }
-
+    delay(300); //sleep for 300ms and hope that the bot has turned 90 degrees
     stop();
 }
