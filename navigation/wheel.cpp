@@ -5,6 +5,7 @@
 Wheel::Wheel(int leftFrontPin, int leftBackPin, int rightFrontPin, int rightBackPin)
     : leftFrontPin(leftFrontPin), leftBackPin(leftBackPin),
       rightFrontPin(rightFrontPin), rightBackPin(rightBackPin), device(0x68) {
+    stop();
 }
 
 void Wheel::setupGyro() {
@@ -13,68 +14,79 @@ void Wheel::setupGyro() {
     device.calc_yaw = true;
 }
 
-float Wheel::readGyro() {
-    float gr, gp, gy;
-    device.getGyro(&gr, &gp, &gy);
-    return gy;
+float Wheel::readYaw() {
+    float yaw;
+    device.getAngle(2, &yaw);  // Yaw axis is 2
+    return yaw;
 }
 
 void Wheel::move_forward() {
     std::cout << "Moving forward\n";
 
-    // create PWM signals
-    softPwmCreate(leftFrontPin, 0, 100);
-    softPwmCreate(rightFrontPin, 0, 100);
-    
-    float angularVelocityZ = readGyro();
-
-    // Adjust the speeds based on the angular velocity
-    int adjustedSpeedLeft = baseSpeedLeft - correctionFactor * angularVelocityZ;
-    int adjustedSpeedRight = baseSpeedRight + correctionFactor * angularVelocityZ;
-
-    // Ensure speeds are within the 0-100 range
-    adjustedSpeedLeft = std::max(0, std::min(100, adjustedSpeedLeft));
-    adjustedSpeedRight = std::max(0, std::min(100, adjustedSpeedRight));
-
-    std::cout << "Left speed: " << adjustedSpeedLeft << ", Right speed: " << adjustedSpeedRight << std::endl;
-
-    softPwmWrite(leftFrontPin, adjustedSpeedLeft);
-    softPwmWrite(rightFrontPin, adjustedSpeedRight);
+    digitalWrite(leftFrontPin, HIGH);
+    digitalWrite(rightFrontPin, HIGH);
     digitalWrite(leftBackPin, LOW);
     digitalWrite(rightBackPin, LOW);
 }
 
 void Wheel::stop() {
     std::cout << "Stopping\n";
-    // Stop PWM signals
-    softPwmStop(leftFrontPin);
-    softPwmStop(rightFrontPin);
+    digitalWrite(leftFrontPin, LOW);
+    digitalWrite(rightFrontPin, LOW);
     digitalWrite(leftBackPin, LOW);
     digitalWrite(rightBackPin, LOW);
 }
 
 void Wheel::turn_left() {
     std::cout << "Turning left\n";
+    float initialYaw = readYaw();
+    float targetYaw = initialYaw - 90.0;
 
-    // Recreate PWM signals
-    softPwmCreate(leftFrontPin, 0, 100);
-    softPwmCreate(rightFrontPin, 0, 100);
+    if (targetYaw < -180.0) {
+        targetYaw += 360.0;
+    }
 
-    softPwmWrite(leftFrontPin, 0);
-    softPwmWrite(rightFrontPin, 50);
-    digitalWrite(leftBackPin, LOW);
+    digitalWrite(leftFrontPin, LOW);
+    digitalWrite(leftBackPin, HIGH);
+    digitalWrite(rightFrontPin, HIGH);
     digitalWrite(rightBackPin, LOW);
+
+    while (true) {
+        float currentYaw = readYaw();
+        if ((initialYaw >= 0 && targetYaw <= currentYaw && currentYaw <= initialYaw) ||
+            (initialYaw < 0 && targetYaw <= currentYaw) ||
+            (initialYaw >= 0 && targetYaw < -180 && currentYaw < 0)) {
+            break;
+        }
+        usleep(10000);  // Sleep for 10ms
+    }
+
+    stop();
 }
 
 void Wheel::turn_right() {
     std::cout << "Turning right\n";
+    float initialYaw = readYaw();
+    float targetYaw = initialYaw + 90.0;
 
-    // Recreate PWM signals
-    softPwmCreate(leftFrontPin, 0, 100);
-    softPwmCreate(rightFrontPin, 0, 100);
+    if (targetYaw > 180.0) {
+        targetYaw -= 360.0;
+    }
 
-    softPwmWrite(leftFrontPin, 50);
-    softPwmWrite(rightFrontPin, 0);
+    digitalWrite(leftFrontPin, HIGH);
     digitalWrite(leftBackPin, LOW);
-    digitalWrite(rightBackPin, LOW);
+    digitalWrite(rightFrontPin, LOW);
+    digitalWrite(rightBackPin, HIGH);
+
+    while (true) {
+        float currentYaw = readYaw();
+        if ((initialYaw <= 0 && targetYaw >= currentYaw && currentYaw >= initialYaw) ||
+            (initialYaw > 0 && targetYaw >= currentYaw) ||
+            (initialYaw <= 0 && targetYaw > 180 && currentYaw > 0)) {
+            break;
+        }
+        usleep(10000);  // Sleep for 10ms
+    }
+
+    stop();
 }

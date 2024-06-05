@@ -11,8 +11,7 @@ class Wheel {
     int rightFrontPin;
     int rightBackPin;
 
-    const int baseSpeedLeft = 50;  // Base speed for the left wheel (0-100)
-    const int baseSpeedRight = 50;  // Base speed for the right wheel (0-100)
+    const int baseSpeed = 50;  // Base speed for turning
     const float correctionFactor = 0.1;  // Factor to adjust the wheel speeds
 
     MPU6050 device;
@@ -25,4 +24,5 @@ public:
     void turn_right();
     void setupGyro();
     float readGyro();
+    float readYaw();
 };

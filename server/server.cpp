@@ -53,6 +53,18 @@ crow::response handleBreak(const crow::request& req) {
     return crow::response{response};
 }
 
+crow::response handleRotate(const crow::request& req) {
+    // Perform rotate action
+    // ...
+    FanaBotTask task;
+    task.task = TaskType::ROTATE;
+    set_navigation(task);
+    crow::json::wvalue response;
+    response["status"] = "success";
+    response["message"] = "Rotate command received";
+    return crow::response{response};
+}
+
 int main() {
     botInfo = initialize_shared_memory();
     crow::SimpleApp app;
@@ -62,6 +74,9 @@ int main() {
 
     // Route for /break
     CROW_ROUTE(app, "/stop").methods(crow::HTTPMethod::POST)(handleBreak);
+
+    // Route for /rotate
+    CROW_ROUTE(app, "/rotate").methods(crow::HTTPMethod::POST)(handleRotate);
 
     app.port(8080).multithreaded().run();
 }

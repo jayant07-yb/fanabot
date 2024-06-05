@@ -119,6 +119,10 @@ int main() {
         {
             stopNavigation(wheel);
         }
+        else if (botInfo->task.task == TaskType::ROTATE)
+        {
+            wheel.turn_right();
+        }
         else
         {
             std::cerr << "Invalid task" << std::endl;
