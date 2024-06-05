@@ -1,14 +1,10 @@
 #include "wheel.h"
 #include <unistd.h>  // For usleep
+#include <iostream>  // For std::cout
 
 Wheel::Wheel(int leftFrontPin, int leftBackPin, int rightFrontPin, int rightBackPin)
     : leftFrontPin(leftFrontPin), leftBackPin(leftBackPin),
       rightFrontPin(rightFrontPin), rightBackPin(rightBackPin), device(0x68) {
-    // Initialize the pins for PWM
-    softPwmCreate(leftFrontPin, 0, 100);
-    softPwmCreate(rightFrontPin, 0, 100);
-    pinMode(leftBackPin, OUTPUT);
-    pinMode(rightBackPin, OUTPUT);
 }
 
 void Wheel::setupGyro() {
@@ -25,6 +21,14 @@ float Wheel::readGyro() {
 
 void Wheel::move_forward() {
     std::cout << "Moving forward\n";
+
+    // Stop any existing PWM signals
+    softPwmStop(leftFrontPin);
+    softPwmStop(rightFrontPin);
+
+    // Recreate PWM signals
+    softPwmCreate(leftFrontPin, 0, 100);
+    softPwmCreate(rightFrontPin, 0, 100);
     
     float angularVelocityZ = readGyro();
 
@@ -44,14 +48,28 @@ void Wheel::move_forward() {
 
 void Wheel::stop() {
     std::cout << "Stopping\n";
-    digitalWrite(leftFrontPin, LOW);
-    digitalWrite(rightFrontPin, LOW);
+    softPwmWrite(leftFrontPin, 0);
+    softPwmWrite(rightFrontPin, 0);
+    
+    // Stop PWM signals
+    softPwmStop(leftFrontPin);
+    softPwmStop(rightFrontPin);
+
     digitalWrite(leftBackPin, LOW);
     digitalWrite(rightBackPin, LOW);
 }
 
 void Wheel::turn_left() {
     std::cout << "Turning left\n";
+
+    // Stop any existing PWM signals
+    softPwmStop(leftFrontPin);
+    softPwmStop(rightFrontPin);
+
+    // Recreate PWM signals
+    softPwmCreate(leftFrontPin, 0, 100);
+    softPwmCreate(rightFrontPin, 0, 100);
+
     softPwmWrite(leftFrontPin, 0);
     softPwmWrite(rightFrontPin, 50);
     digitalWrite(leftBackPin, LOW);
@@ -60,6 +78,15 @@ void Wheel::turn_left() {
 
 void Wheel::turn_right() {
     std::cout << "Turning right\n";
+
+    // Stop any existing PWM signals
+    softPwmStop(leftFrontPin);
+    softPwmStop(rightFrontPin);
+
+    // Recreate PWM signals
+    softPwmCreate(leftFrontPin, 0, 100);
+    softPwmCreate(rightFrontPin, 0, 100);
+
     softPwmWrite(leftFrontPin, 50);
     softPwmWrite(rightFrontPin, 0);
     digitalWrite(leftBackPin, LOW);
