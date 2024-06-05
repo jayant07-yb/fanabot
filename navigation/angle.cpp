@@ -10,7 +10,7 @@ AngleTracker::AngleTracker()
 void AngleTracker::setupGyro() {
     sleep(1); // Wait for the MPU6050 to stabilize
     device.calc_yaw = true;
-    lastUpdateTime = millis();
+    lastUpdateTime = local_mills();
 }
 
 float AngleTracker::readGyroZ() {
@@ -24,8 +24,8 @@ float AngleTracker::integrateGyro(float gyroRate, float dt) {
 }
 
 void AngleTracker::updateAngle() {
-    unsigned long currentTime = millis();
-    float dt = (currentTime - lastUpdateTime) / 1000.0;  // Convert milliseconds to seconds
+    unsigned long currentTime = local_mills();
+    float dt = (currentTime - lastUpdateTime) / 1000.0;  // Convert local_millseconds to seconds
     float gyroZ = readGyroZ();
     currentAngle += integrateGyro(gyroZ, dt);
     lastUpdateTime = currentTime;
@@ -35,7 +35,7 @@ float AngleTracker::getCurrentAngle() {
     return currentAngle;
 }
 
-unsigned long millis() {
+unsigned long local_mills() {
     using namespace std::chrono;
-    return duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
+    return duration_cast<local_millseconds>(system_clock::now().time_since_epoch()).count();
 }
