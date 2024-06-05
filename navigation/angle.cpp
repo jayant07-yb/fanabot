@@ -2,6 +2,11 @@
 #include <unistd.h>  // For usleep
 #include <chrono>
 
+unsigned long local_mills() {
+    using namespace std::chrono;
+    return duration_cast<millseconds>(system_clock::now().time_since_epoch()).count();
+}
+
 AngleTracker::AngleTracker()
     : device(0x68), currentAngle(0.0), lastUpdateTime(0) {
     setupGyro();
@@ -33,9 +38,4 @@ void AngleTracker::updateAngle() {
 
 float AngleTracker::getCurrentAngle() {
     return currentAngle;
-}
-
-unsigned long local_mills() {
-    using namespace std::chrono;
-    return duration_cast<local_millseconds>(system_clock::now().time_since_epoch()).count();
 }
