@@ -67,40 +67,32 @@ void stopNavigation(Wheel& wheel)
     botInfo->task.task = CommandType::STOP;
 }
 
-void goToLocation(Wheel& wheel, pair<int, int> coordinates)
-{
-    std::vector<WheelCommands> commands = getRoute(coordinates);
-    for (auto command : commands)
-    {
-        switch (command.type)
-        {
-        case CommandType::MOVE:
-            moveStraightLine(wheel);
-            break;
-        case CommandType::ROTATE_LEFT:
-            wheel.turn_left();
-            break;
-        case CommandType::ROTATE_RIGHT:
-            wheel.turn_right();
-            break;
-        case CommandType::STOP:
-            stopNavigation(wheel);
-            break;
-        default:
-            std::cerr << "Invalid command" << std::endl;
-            break;
-        }
-    }
+// void goToLocation(Wheel& wheel, pair<int, int> coordinates)
+// {
+//     std::vector<WheelCommands> commands = getRoute(coordinates);
+//     for (auto command : commands)
+//     {
+//         switch (command.type)
+//         {
+//         case CommandType::MOVE:
+//             moveStraightLine(wheel);
+//             break;
+//         case CommandType::ROTATE_LEFT:
+//             wheel.turn_left();
+//             break;
+//         case CommandType::ROTATE_RIGHT:
+//             wheel.turn_right();
+//             break;
+//         case CommandType::STOP:
+//             stopNavigation(wheel);
+//             break;
+//         default:
+//             std::cerr << "Invalid command" << std::endl;
+//             break;
+//         }
+//     }
 
-}
-
-void setupGyro() {
-    if (!lsm.begin()) {
-        std::cerr << "Failed to initialize the gyroscope!" << std::endl;
-        exit(1);
-    }
-    lsm.setupGyro(lsm.LSM9DS1_GYROSCALE_245DPS);
-}
+// }
 
 int main() {
     botInfo = initialize_shared_memory();

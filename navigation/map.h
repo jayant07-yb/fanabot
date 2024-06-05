@@ -9,6 +9,7 @@ enum CommandType {
 };
 
 class WheelCommands {
+    public:
     CommandType type;
 };
 
