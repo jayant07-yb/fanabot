@@ -21,7 +21,7 @@ float Wheel::readYaw() {
 }
 
 void Wheel::move_forward() {
-    std::cout << "Moving forward\n";
+    std::cout << "Moving forward " << leftFrontPin << " " << rightFrontPin << std::endl ;
 
     digitalWrite(leftFrontPin, HIGH);
     digitalWrite(rightFrontPin, HIGH);
