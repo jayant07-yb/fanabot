@@ -95,6 +95,12 @@ void stopNavigation(Wheel& wheel)
 // }
 
 int main() {
+    // Initialize WiringPi
+    if (wiringPiSetup() == -1) {
+        std::cerr << "Failed to initialize WiringPi!" << std::endl;
+        return 1;
+    }
+
     botInfo = initialize_shared_memory();
     Wheel wheel(27, 22, 5, 6);
     wheel.setupGyro();
