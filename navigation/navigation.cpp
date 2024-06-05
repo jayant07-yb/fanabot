@@ -38,7 +38,7 @@ void moveStraightLine(Wheel& wheel)
         return;
     }
 
-    while(remaining_distance > 0) {
+    while(remaining_distance > 0 || botInfo->task.task == TaskType::MOVE) {
         usleep(100000);  // 100 ms
         if (botInfo->obstacleDetected)
         {
