@@ -64,7 +64,7 @@ void stopNavigation(Wheel& wheel)
     wheel.stop();
     botInfo->isMoving = false;
     botInfo->task.magnitude = 0;
-    botInfo->task.task = CommandType::STOP;
+    botInfo->task.task = TaskType::STOP;
 }
 
 // void goToLocation(Wheel& wheel, pair<int, int> coordinates)
