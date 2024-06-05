@@ -5,7 +5,12 @@
 Wheel::Wheel(int leftFrontPin, int leftBackPin, int rightFrontPin, int rightBackPin)
     : leftFrontPin(leftFrontPin), leftBackPin(leftBackPin),
       rightFrontPin(rightFrontPin), rightBackPin(rightBackPin), device(0x68) {
-    stop();
+    
+    wiringPiSetupGpio();  // Use GPIO numbering
+    pinMode(leftFrontPin, OUTPUT);
+    pinMode(leftBackPin, OUTPUT);
+    pinMode(rightFrontPin, OUTPUT);
+    pinMode(rightBackPin, OUTPUT);
 }
 
 void Wheel::setupGyro() {
