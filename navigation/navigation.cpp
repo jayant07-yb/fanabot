@@ -38,8 +38,7 @@ void moveStraightLine(Wheel& wheel)
         return;
     }
 
-
-    while(remaining_distance > 0){
+    while(remaining_distance > 0) {
         usleep(100000);  // 100 ms
         if (botInfo->obstacleDetected)
         {
@@ -65,7 +64,7 @@ void stopNavigation(Wheel& wheel)
     wheel.stop();
     botInfo->isMoving = false;
     botInfo->task.magnitude = 0;
-    botInfo->task.task = TaskType::STOP;
+    botInfo->task.task = CommandType::STOP;
 }
 
 void goToLocation(Wheel& wheel, pair<int, int> coordinates)
@@ -75,16 +74,16 @@ void goToLocation(Wheel& wheel, pair<int, int> coordinates)
     {
         switch (command.type)
         {
-        case WheelCommands::FORWARD:
+        case CommandType::MOVE:
             moveStraightLine(wheel);
             break;
-        case WheelCommands::LEFT:
+        case CommandType::ROTATE_LEFT:
             wheel.turn_left();
             break;
-        case WheelCommands::RIGHT:
+        case CommandType::ROTATE_RIGHT:
             wheel.turn_right();
             break;
-        case WheelCommands::STOP:
+        case CommandType::STOP:
             stopNavigation(wheel);
             break;
         default:
@@ -115,7 +114,8 @@ int main() {
         
         if (botInfo->task.task == TaskType::MOVE)
         {
-            goToLocation(wheel, {0, 0}); // Dummy coordinates
+            // goToLocation(wheel, {0, 0}); // Dummy coordinates
+            moveStraightLine(wheel);
         }
         else if (botInfo->task.task == TaskType::STOP)
         {
