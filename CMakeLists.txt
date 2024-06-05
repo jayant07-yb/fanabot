@@ -7,6 +7,8 @@ set(VL53L0X_DIR "/home/jayan/code/dependencies/vl53l0x-linux")
 # Specify the path to the Crow library within the project
 set(CROW_INCLUDE_DIR "/home/jayan/code/dependencies/Crow/include")
 
+set(Adafruit_LSM9DS1_DIR "/home/jayan/code/dependencies/Adafruit_LSM9DS1")
+
 # Define the source files for the project
 # set(SOURCES
 #     main.cpp

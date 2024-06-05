@@ -1,33 +1,68 @@
 #include "wheel.h"
-#include <iostream>
-#include <pthread.h>
-#include <unistd.h>
-#include <csignal>
-#include <wiringPi.h>
 
 Wheel::Wheel(int leftFrontPin, int leftBackPin, int rightFrontPin, int rightBackPin)
-    : leftBackPin(leftBackPin), rightBackPin(rightBackPin), leftFrontPin(leftFrontPin), rightFrontPin(rightFrontPin) {
-    // Initialize the GPIO pins
-    wiringPiSetupGpio();  // Use GPIO numbering
-    pinMode(leftFrontPin, OUTPUT);
+    : leftFrontPin(leftFrontPin), leftBackPin(leftBackPin),
+      rightFrontPin(rightFrontPin), rightBackPin(rightBackPin), lsm() {
+    // Initialize the pins for PWM
+    softPwmCreate(leftFrontPin, 0, 100);
+    softPwmCreate(rightFrontPin, 0, 100);
     pinMode(leftBackPin, OUTPUT);
-    pinMode(rightFrontPin, OUTPUT);
     pinMode(rightBackPin, OUTPUT);
+}
+
+void Wheel::setupGyro() {
+    if (!lsm.begin()) {
+        std::cerr << "Failed to initialize the gyroscope!" << std::endl;
+        exit(1);
+    }
+    lsm.setupGyro(lsm.LSM9DS1_GYROSCALE_245DPS);
+}
+
+float Wheel::readGyro() {
+    sensors_event_t gyroEvent;
+    lsm.getEvent(&gyroEvent);
+    return gyroEvent.gyro.z;
 }
 
 void Wheel::move_forward() {
     std::cout << "Moving forward\n";
-    digitalWrite(leftBackPin, LOW);  // Set the left back pin low
-    digitalWrite(rightBackPin, LOW);  // Set the right back pin low
-    digitalWrite(leftFrontPin, HIGH);  // Set the left front pin high
-    digitalWrite(rightFrontPin, HIGH);  // Set the right front pin high
+    
+    float angularVelocityZ = readGyro();
+
+    // Adjust the speeds based on the angular velocity
+    int adjustedSpeedLeft = baseSpeedLeft - correctionFactor * angularVelocityZ;
+    int adjustedSpeedRight = baseSpeedRight + correctionFactor * angularVelocityZ;
+
+    // Ensure speeds are within the 0-100 range
+    adjustedSpeedLeft = std::max(0, std::min(100, adjustedSpeedLeft));
+    adjustedSpeedRight = std::max(0, std::min(100, adjustedSpeedRight));
+
+    softPwmWrite(leftFrontPin, adjustedSpeedLeft);
+    softPwmWrite(rightFrontPin, adjustedSpeedRight);
+    digitalWrite(leftBackPin, LOW);
+    digitalWrite(rightBackPin, LOW);
 }
 
 void Wheel::stop() {
     std::cout << "Stopping\n";
-    digitalWrite(leftBackPin, LOW);  // Set the left back pin low
-    digitalWrite(rightBackPin, LOW);  // Set the right back pin low
-    digitalWrite(leftFrontPin, LOW);  // Set the left front pin low
-    digitalWrite(rightFrontPin, LOW);  // Set the right front pin low
+    softPwmWrite(leftFrontPin, 0);
+    softPwmWrite(rightFrontPin, 0);
+    digitalWrite(leftBackPin, LOW);
+    digitalWrite(rightBackPin, LOW);
 }
 
+void Wheel::turn_left() {
+    std::cout << "Turning left\n";
+    softPwmWrite(leftFrontPin, 0);
+    softPwmWrite(rightFrontPin, 50);
+    digitalWrite(leftBackPin, LOW);
+    digitalWrite(rightBackPin, LOW);
+}
+
+void Wheel::turn_right() {
+    std::cout << "Turning right\n";
+    softPwmWrite(leftFrontPin, 50);
+    softPwmWrite(rightFrontPin, 0);
+    digitalWrite(leftBackPin, LOW);
+    digitalWrite(rightBackPin, LOW);
+}

@@ -1,8 +1,12 @@
 #include "wheel.h"
+#include "map.h"
 #include "shmem.h"
 #include <pthread.h>
 #include <unistd.h>
 #include <iostream>
+#include <vector>
+#include <utility>
+
 
 using namespace std;
 
@@ -23,7 +27,7 @@ void* read_location(void* remaining_distance_void) {
     return NULL;
 }
 
-void runNavigation(Wheel& wheel)
+void moveStraightLine(Wheel& wheel)
 {
     pthread_t location_thread;
     botInfo->isMoving = true;
@@ -64,11 +68,46 @@ void stopNavigation(Wheel& wheel)
     botInfo->task.task = TaskType::STOP;
 }
 
+void goToLocation(Wheel& wheel, pair<int, int> coordinates)
+{
+    std::vector<WheelCommands> commands = getRoute(coordinates);
+    for (auto command : commands)
+    {
+        switch (command.type)
+        {
+        case WheelCommands::FORWARD:
+            moveStraightLine(wheel);
+            break;
+        case WheelCommands::LEFT:
+            wheel.turn_left();
+            break;
+        case WheelCommands::RIGHT:
+            wheel.turn_right();
+            break;
+        case WheelCommands::STOP:
+            stopNavigation(wheel);
+            break;
+        default:
+            std::cerr << "Invalid command" << std::endl;
+            break;
+        }
+    }
+
+}
+
+void setupGyro() {
+    if (!lsm.begin()) {
+        std::cerr << "Failed to initialize the gyroscope!" << std::endl;
+        exit(1);
+    }
+    lsm.setupGyro(lsm.LSM9DS1_GYROSCALE_245DPS);
+}
+
 int main() {
     botInfo = initialize_shared_memory();
     Wheel wheel(27, 22, 5, 6);
+    wheel.setupGyro();
     wheel.stop();
-
     while (true)
     {
         // Delay is starting or stopping the value
@@ -76,7 +115,7 @@ int main() {
         
         if (botInfo->task.task == TaskType::MOVE)
         {
-            runNavigation(wheel);
+            goToLocation(wheel, {0, 0}); // Dummy coordinates
         }
         else if (botInfo->task.task == TaskType::STOP)
         {

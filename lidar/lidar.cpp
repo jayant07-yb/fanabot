@@ -13,7 +13,7 @@ using namespace std;
 #define SERVO_PIN RPI_GPIO_P1_12  // GPIO 18
 #define LIDAR_PERMITABLE_DISTANCE 800
 
-VL53L0X sensor;  // Device instance for the VL53L0X
+VL53L0X lidar_sensor;  // Device instance for the VL53L0X
 
 // Calculate pulse width for the given angle
 static inline int calculate_pulse_width(int angle) {
@@ -47,7 +47,7 @@ void* rotate_servo(void* arg) {
     return nullptr;
 }
 
-// Read distance from the VL53L0X sensor
+// Read distance from the VL53L0X lidar_sensor
 void* read_lidar(void* arg) {
     FanaBotInfo* botStatus = static_cast<FanaBotInfo*>(arg);
     while (true) {
@@ -58,8 +58,8 @@ void* read_lidar(void* arg) {
 
         usleep(50000);  // 50ms delay
         try {
-            uint16_t distance = sensor.readRangeSingleMillimeters();
-            if (sensor.timeoutOccurred()) {
+            uint16_t distance = lidar_sensor.readRangeSingleMillimeters();
+            if (lidar_sensor.timeoutOccurred()) {
                 std::cerr << "Timeout occurred!" << std::endl;
             } else {
                 std::cout<< "Distance: " << distance << " mm" << std::endl;
@@ -87,10 +87,10 @@ int main() {
     // Set the servo pin as an output
     bcm2835_gpio_fsel(SERVO_PIN, BCM2835_GPIO_FSEL_OUTP);
 
-    // Initialize the VL53L0X sensor
-    sensor.initialize();
-    sensor.setTimeout(500);
-    sensor.startContinuous();
+    // Initialize the VL53L0X lidar_sensor
+    lidar_sensor.initialize();
+    lidar_sensor.setTimeout(500);
+    lidar_sensor.startContinuous();
 
     // Initialize the shared memory
     FanaBotInfo* fanaBotInfo = initialize_shared_memory();
