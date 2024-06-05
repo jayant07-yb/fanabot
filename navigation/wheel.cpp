@@ -44,8 +44,8 @@ void Wheel::move_forward() {
 
 void Wheel::stop() {
     std::cout << "Stopping\n";
-    softPwmWrite(leftFrontPin, 0);
-    softPwmWrite(rightFrontPin, 0);
+    digitalWrite(leftFrontPin, 0);
+    digitalWrite(rightFrontPin, 0);
     digitalWrite(leftBackPin, LOW);
     digitalWrite(rightBackPin, LOW);
 }
