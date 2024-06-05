@@ -3,8 +3,7 @@
 #include <wiringPi.h>
 #include <softPwm.h>
 #include <iostream>
-#include <Adafruit_Sensor.h>
-#include <Adafruit_LSM9DS1.h>
+#include "MPU6050.h"
 
 class Wheel {
     int leftFrontPin;
@@ -16,7 +15,7 @@ class Wheel {
     const int baseSpeedRight = 50;  // Base speed for the right wheel (0-100)
     const float correctionFactor = 0.1;  // Factor to adjust the wheel speeds
 
-    Adafruit_LSM9DS1 lsm;
+    MPU6050 mpu;
 
 public:
     Wheel(int leftFrontPin, int leftBackPin, int rightFrontPin, int rightBackPin);

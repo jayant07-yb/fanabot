@@ -2,7 +2,7 @@
 
 Wheel::Wheel(int leftFrontPin, int leftBackPin, int rightFrontPin, int rightBackPin)
     : leftFrontPin(leftFrontPin), leftBackPin(leftBackPin),
-      rightFrontPin(rightFrontPin), rightBackPin(rightBackPin), lsm() {
+      rightFrontPin(rightFrontPin), rightBackPin(rightBackPin), mpu(0x68) {
     // Initialize the pins for PWM
     softPwmCreate(leftFrontPin, 0, 100);
     softPwmCreate(rightFrontPin, 0, 100);
@@ -11,17 +11,17 @@ Wheel::Wheel(int leftFrontPin, int leftBackPin, int rightFrontPin, int rightBack
 }
 
 void Wheel::setupGyro() {
-    if (!lsm.begin()) {
+    if (!mpu.testConnection()) {
         std::cerr << "Failed to initialize the gyroscope!" << std::endl;
         exit(1);
     }
-    lsm.setupGyro(lsm.LSM9DS1_GYROSCALE_245DPS);
+    mpu.initialize();
 }
 
 float Wheel::readGyro() {
-    sensors_event_t gyroEvent;
-    lsm.getEvent(&gyroEvent);
-    return gyroEvent.gyro.z;
+    int16_t gx, gy, gz;
+    mpu.getRotation(&gx, &gy, &gz);
+    return gz / 131.0; // Convert raw gyroscope data to degrees/second
 }
 
 void Wheel::move_forward() {
