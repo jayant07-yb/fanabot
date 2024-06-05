@@ -3,7 +3,6 @@
 #include <wiringPi.h>
 #include <softPwm.h>
 #include <iostream>
-#include "MPU6050.h"
 
 class Wheel {
     int leftFrontPin;
@@ -13,8 +12,6 @@ class Wheel {
 
     const int baseSpeed = 50;  // Base speed for turning
     const float correctionFactor = 0.1;  // Factor to adjust the wheel speeds
-
-    MPU6050 device;
 
 public:
     Wheel(int leftFrontPin, int leftBackPin, int rightFrontPin, int rightBackPin);

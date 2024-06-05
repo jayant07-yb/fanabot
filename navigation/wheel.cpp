@@ -5,7 +5,7 @@
 
 Wheel::Wheel(int leftFrontPin, int leftBackPin, int rightFrontPin, int rightBackPin)
     : leftFrontPin(leftFrontPin), leftBackPin(leftBackPin),
-      rightFrontPin(rightFrontPin), rightBackPin(rightBackPin), device(0x68) {
+      rightFrontPin(rightFrontPin), rightBackPin(rightBackPin){
     
     wiringPiSetupGpio();  // Use GPIO numbering
     pinMode(leftFrontPin, OUTPUT);
@@ -17,12 +17,12 @@ Wheel::Wheel(int leftFrontPin, int leftBackPin, int rightFrontPin, int rightBack
 void Wheel::setupGyro() {
     sleep(1); // Wait for the MPU6050 to stabilize
     // Optionally calculate offsets here if needed
-    device.calc_yaw = true;
+    // device.calc_yaw = true;
 }
 
 float Wheel::readYaw() {
     float yaw;
-    device.getAngle(2, &yaw);  // Yaw axis is 2
+    // device.getAngle(2, &yaw);  // Yaw axis is 2
     return yaw;
 }
 
@@ -73,7 +73,7 @@ void Wheel::turn_left() {
 void Wheel::turn_right() {
     std::cout << "Turning right\n";
     AngleTracker angleTracker;
-    initial_angle = getCurrentAngle();
+    float initial_angle = angleTracker.getCurrentAngle();
 
     digitalWrite(leftFrontPin, HIGH);
     digitalWrite(leftBackPin, LOW);
