@@ -1,4 +1,5 @@
 #include "wheel.h"
+#include "angle.h"
 #include <unistd.h>  // For usleep
 #include <iostream>  // For std::cout
 
@@ -71,12 +72,8 @@ void Wheel::turn_left() {
 
 void Wheel::turn_right() {
     std::cout << "Turning right\n";
-    float initialYaw = readYaw();
-    float targetYaw = initialYaw + 90.0;
-
-    if (targetYaw > 180.0) {
-        targetYaw -= 360.0;
-    }
+    AngleTracker angleTracker;
+    initial_angle = getCurrentAngle();
 
     digitalWrite(leftFrontPin, HIGH);
     digitalWrite(leftBackPin, LOW);
@@ -84,13 +81,14 @@ void Wheel::turn_right() {
     digitalWrite(rightBackPin, HIGH);
 
     while (true) {
-        float currentYaw = readYaw();
-        if ((initialYaw <= 0 && targetYaw >= currentYaw && currentYaw >= initialYaw) ||
-            (initialYaw > 0 && targetYaw >= currentYaw) ||
-            (initialYaw <= 0 && targetYaw > 180 && currentYaw > 0)) {
+        angleTracker.updateAngle();
+        float currentAngle = angleTracker.getCurrentAngle();
+        std::cout << "Current Angle: " << currentAngle << " degrees" << std::endl;
+        delay(100);  // Update every 100 ms
+
+        if (currentAngle - initial_angle >= 90.0) {
             break;
-        }
-        usleep(10000);  // Sleep for 10ms
+        }    
     }
 
     stop();
