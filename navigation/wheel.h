@@ -15,7 +15,7 @@ class Wheel {
     const int baseSpeedRight = 50;  // Base speed for the right wheel (0-100)
     const float correctionFactor = 0.1;  // Factor to adjust the wheel speeds
 
-    MPU6050 mpu;
+    MPU6050 device;
 
 public:
     Wheel(int leftFrontPin, int leftBackPin, int rightFrontPin, int rightBackPin);
