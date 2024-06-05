@@ -10,7 +10,7 @@ include_directories(${CMAKE_SOURCE_DIR}/common)
 include_directories(/usr/local/include)
 
 # Add executable
-add_executable(navigation navigation.cpp wheel.cpp)
+add_executable(navigation navigation.cpp wheel.cpp angle.cpp)
 
 # Link libraries
 target_link_libraries(navigation pthread wiringPi MPU6050 common)
