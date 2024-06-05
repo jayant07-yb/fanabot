@@ -1,8 +1,9 @@
 #include "wheel.h"
+#include <unistd.h>  // For usleep
 
 Wheel::Wheel(int leftFrontPin, int leftBackPin, int rightFrontPin, int rightBackPin)
     : leftFrontPin(leftFrontPin), leftBackPin(leftBackPin),
-      rightFrontPin(rightFrontPin), rightBackPin(rightBackPin), mpu(0x68) {
+      rightFrontPin(rightFrontPin), rightBackPin(rightBackPin), device(0x68) {
     // Initialize the pins for PWM
     softPwmCreate(leftFrontPin, 0, 100);
     softPwmCreate(rightFrontPin, 0, 100);
@@ -11,17 +12,15 @@ Wheel::Wheel(int leftFrontPin, int leftBackPin, int rightFrontPin, int rightBack
 }
 
 void Wheel::setupGyro() {
-    if (!mpu.testConnection()) {
-        std::cerr << "Failed to initialize the gyroscope!" << std::endl;
-        exit(1);
-    }
-    mpu.initialize();
+    sleep(1); // Wait for the MPU6050 to stabilize
+    // Optionally calculate offsets here if needed
+    device.calc_yaw = true;
 }
 
 float Wheel::readGyro() {
-    int16_t gx, gy, gz;
-    mpu.getRotation(&gx, &gy, &gz);
-    return gz / 131.0; // Convert raw gyroscope data to degrees/second
+    float gr, gp, gy;
+    device.getGyro(&gr, &gp, &gy);
+    return gy;
 }
 
 void Wheel::move_forward() {
