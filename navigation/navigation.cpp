@@ -108,7 +108,7 @@ int main() {
     while (true)
     {
         // Delay is starting or stopping the value
-        usleep(100000); // 100 ms -- Need to decrease this value
+        sleep(3); // sleep for 3 seconds
         std::cout << "Task: " << botInfo->task.task << std::endl;
         if (botInfo->task.task == TaskType::MOVE)
         {

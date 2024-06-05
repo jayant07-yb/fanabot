@@ -22,11 +22,7 @@ float Wheel::readGyro() {
 void Wheel::move_forward() {
     std::cout << "Moving forward\n";
 
-    // Stop any existing PWM signals
-    softPwmStop(leftFrontPin);
-    softPwmStop(rightFrontPin);
-
-    // Recreate PWM signals
+    // create PWM signals
     softPwmCreate(leftFrontPin, 0, 100);
     softPwmCreate(rightFrontPin, 0, 100);
     
@@ -40,6 +36,8 @@ void Wheel::move_forward() {
     adjustedSpeedLeft = std::max(0, std::min(100, adjustedSpeedLeft));
     adjustedSpeedRight = std::max(0, std::min(100, adjustedSpeedRight));
 
+    std::cout << "Left speed: " << adjustedSpeedLeft << ", Right speed: " << adjustedSpeedRight << std::endl;
+
     softPwmWrite(leftFrontPin, adjustedSpeedLeft);
     softPwmWrite(rightFrontPin, adjustedSpeedRight);
     digitalWrite(leftBackPin, LOW);
@@ -48,23 +46,15 @@ void Wheel::move_forward() {
 
 void Wheel::stop() {
     std::cout << "Stopping\n";
-    softPwmWrite(leftFrontPin, 0);
-    softPwmWrite(rightFrontPin, 0);
-    
     // Stop PWM signals
     softPwmStop(leftFrontPin);
     softPwmStop(rightFrontPin);
-
     digitalWrite(leftBackPin, LOW);
     digitalWrite(rightBackPin, LOW);
 }
 
 void Wheel::turn_left() {
     std::cout << "Turning left\n";
-
-    // Stop any existing PWM signals
-    softPwmStop(leftFrontPin);
-    softPwmStop(rightFrontPin);
 
     // Recreate PWM signals
     softPwmCreate(leftFrontPin, 0, 100);
@@ -78,10 +68,6 @@ void Wheel::turn_left() {
 
 void Wheel::turn_right() {
     std::cout << "Turning right\n";
-
-    // Stop any existing PWM signals
-    softPwmStop(leftFrontPin);
-    softPwmStop(rightFrontPin);
 
     // Recreate PWM signals
     softPwmCreate(leftFrontPin, 0, 100);
