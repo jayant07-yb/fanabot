@@ -4,7 +4,7 @@
 
 unsigned long local_mills() {
     using namespace std::chrono;
-    return duration_cast<millseconds>(system_clock::now().time_since_epoch()).count();
+    return duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
 }
 
 AngleTracker::AngleTracker()
