@@ -13,4 +13,4 @@ include_directories(/usr/local/include)
 add_executable(navigation navigation.cpp wheel.cpp)
 
 # Link libraries
-target_link_libraries(navigation pthread wiringPi MPU6050)
+target_link_libraries(navigation pthread wiringPi MPU6050 common)
